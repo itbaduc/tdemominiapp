@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import WebApp from "@twa-dev/sdk";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import Earn from "./pages/Earn";
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <TonConnectUIProvider manifestUrl="/manifest.json">
-      <Router>
+      <HashRouter>
         <div className="app">
           <div
             className="content"
@@ -36,7 +36,7 @@ function App() {
           </div>
           <Navigation />
         </div>
-      </Router>
+      </HashRouter>
     </TonConnectUIProvider>
   );
 }
