@@ -16,11 +16,49 @@ function App() {
 
   useEffect(() => {
     WebApp.ready();
-    // Ở đây bạn có thể thêm logic để lấy dữ liệu thực tế từ backend
+
+    const userInfo = WebApp.initDataUnsafe.user;
+    if (userInfo) {
+      const { id, username, first_name, last_name } = userInfo;
+      console.log("Telegram User ID:", id);
+      console.log("Telegram Username:", username);
+      console.log("Tên:", first_name, last_name);
+
+      // Gọi API để lưu thông tin người dùng vào database
+      saveUserInfoToDatabase(id, username, first_name, last_name);
+    }
   }, []);
 
+  const saveUserInfoToDatabase = async (id, username, firstName, lastName) => {
+    try {
+      const response = await fetch(
+        "https://ton-teleminiapp-backend.vercel.app/users/telegram-user",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            telegramId: id,
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Đã lưu thông tin người dùng vào database");
+      } else {
+        console.error("Lỗi khi lưu thông tin người dùng");
+      }
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+    }
+  };
+
   return (
-    <TonConnectUIProvider manifestUrl="/manifest.json">
+    <TonConnectUIProvider manifestUrl="https://itbaduc.github.io/tdemominiapp/manifest.json">
       <HashRouter>
         <div className="app">
           <div
