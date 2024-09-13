@@ -58,7 +58,7 @@ function App() {
   };
 
   return (
-    <TonConnectUIProvider manifestUrl="https://itbaduc.github.io/tdemominiapp/manifest.json">
+    <TonConnectUIProvider manifestUrl="https://itbaduc.github.io/tdemominiapp/tonconnect-manifest.json">
       <HashRouter>
         <div className="app">
           <div
