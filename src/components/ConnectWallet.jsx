@@ -10,7 +10,7 @@ function ConnectWallet() {
     const updateWalletAddress = async () => {
       if (tonConnectUI.connected) {
         const walletInfo = await tonConnectUI.wallet;
-        console.log("walletInfo", walletInfo);
+        // console.log("walletInfo", walletInfo);
         if (walletInfo) {
           setWalletAddress(walletInfo.account.address);
         }

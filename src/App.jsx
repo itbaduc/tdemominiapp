@@ -20,34 +20,15 @@ function App() {
   const [farming, setFarming] = useState(5.55);
   const [timeLeft, setTimeLeft] = useState("07h 17m");
 
-  useEffect(async () => {
+  useEffect(() => {
     WebApp.ready();
     const userInfo = WebApp.initDataUnsafe.user;
-    // console.log("WebApp", WebApp);
-
-    // Lưu thông tin người dùng vào file info.txt
-    // const userInfoString = `ID: `;
-    // const blob = new Blob([userInfoString], { type: "text/plain" });
-    // const link = document.createElement("a");
-    // link.href = URL.createObjectURL(blob);
-    // link.download = "info.txt";
-    // link.click();
-    // URL.revokeObjectURL(link.href);
 
     if (userInfo) {
       const { id, username, first_name, last_name } = userInfo;
 
       // Gọi API để lưu thông tin người dùng vào database
       saveUserInfoToDatabase(id, username, first_name, last_name);
-
-      // Lưu thông tin người dùng vào file info.txt
-      // const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${first_name} ${last_name}`;
-      // const blob = new Blob([userInfoString], { type: "text/plain" });
-      // const link = document.createElement("a");
-      // link.href = URL.createObjectURL(blob);
-      // link.download = "info.txt";
-      // link.click();
-      // URL.revokeObjectURL(link.href);
     }
   }, []);
 
@@ -68,7 +49,10 @@ function App() {
         }
       );
 
-      const userInfoString = `response:\n ${response}\n=================\nbackend link: ${BACKEND_URI}`;
+      const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}\nresponse: ${
+        response.status
+      } - ${JSON.stringify(response)}`;
+
       const blob = new Blob([userInfoString], { type: "text/plain" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -79,7 +63,9 @@ function App() {
       if (response.ok) {
         // console.log("Đã lưu thông tin người dùng vào database");
         // Lưu thông tin người dùng vào file info.txt
-        const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}, response: ${response.ok} - ${response}`;
+        // const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}\nresponse: ${
+        //   response.status
+        // } - ${JSON.stringify(response)}`;
         const blob = new Blob([userInfoString], { type: "text/plain" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -89,7 +75,7 @@ function App() {
       } else {
         // console.error("Lỗi khi lưu thông tin người dùng");
         // Lưu thông tin người dùng vào file info.txt
-        const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}, response: ${response.ok} - ${response}`;
+        const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}\nresponse: ${response.ok} - ${response}`;
         const blob = new Blob([userInfoString], { type: "text/plain" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -114,7 +100,7 @@ function App() {
         <div className="app">
           <div
             className="content"
-            style={{ "max-height": "calc(100vh - 80px)", overflowY: "auto" }}
+            style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}
           >
             <Routes>
               <Route path="/" element={<Navigate to="/home" replace />} />
