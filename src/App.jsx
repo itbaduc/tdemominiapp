@@ -49,23 +49,16 @@ function App() {
         }
       );
 
-      const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}\nresponse: ${
-        response.status
-      } - ${JSON.stringify(response)}`;
-
-      const blob = new Blob([userInfoString], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "response.txt";
-      link.click();
-      URL.revokeObjectURL(link.href);
-
-      if (response.ok) {
+      if (
+        response.status == 200 ||
+        response.status == 201 ||
+        response.status == 204
+      ) {
         // console.log("Đã lưu thông tin người dùng vào database");
         // Lưu thông tin người dùng vào file info.txt
-        // const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}\nresponse: ${
-        //   response.status
-        // } - ${JSON.stringify(response)}`;
+        const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}\nresponse: ${
+          response.status
+        } - ${JSON.stringify(response)}`;
         const blob = new Blob([userInfoString], { type: "text/plain" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
