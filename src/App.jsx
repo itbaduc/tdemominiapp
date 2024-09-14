@@ -97,8 +97,8 @@ function App() {
             className="content"
             style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}
           >
-            <Home />
             <Routes>
+              <Route path="*" element={<Navigate to="/home" replace />} />
               <Route path="/" element={<Navigate to="/home" replace />} />
               <Route path="/home" element={<Home />} />
               <Route path="/earn" element={<Earn />} />
