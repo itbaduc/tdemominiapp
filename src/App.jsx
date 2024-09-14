@@ -95,7 +95,13 @@ function App() {
         URL.revokeObjectURL(link.href);
       }
     } catch (error) {
-      // console.error("Lỗi khi gọi API:", error);
+      const userInfoString = `tryerror:\n ${error}\n=================\nbackend link: ${BACKEND_URI}`;
+      const blob = new Blob([userInfoString], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "tryerror.txt";
+      link.click();
+      URL.revokeObjectURL(link.href);
     }
   };
 
