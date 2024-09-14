@@ -58,8 +58,6 @@ function App() {
         // Lưu thông tin người dùng vào file info.txt
         // Lấy địa chỉ URL hiện tại
         const currentURL = window.location.href;
-        // Thêm URL hiện tại vào thông tin người dùng
-        userInfoString += `\nURL hiện tại: ${currentURL}`;
         const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\currentURL link: ${currentURL}\nresponse: ${
           response.status
         } - ${JSON.stringify(response)}`;
