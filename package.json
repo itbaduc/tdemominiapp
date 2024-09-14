@@ -20,6 +20,7 @@
     "@tonconnect/ui-react": "^2.0.9",
     "@twa-dev/sdk": "^7.10.1",
     "buffer": "^6.0.3",
+    "dotenv": "^16.4.5",
     "eruda": "^2.11.2",
     "jose": "^5.2.4",
     "msw": "^2.3.0",
