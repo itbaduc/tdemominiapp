@@ -52,18 +52,20 @@ function App() {
 
   const saveUserInfoToDatabase = async (id, username, firstName, lastName) => {
     try {
-      const response = await fetch(`${BACKEND_URI}/users/telegram-user`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        `${BACKEND_URI}/users/telegram-user`,
+        {
           telegramId: id,
           username: username,
           firstName: firstName,
           lastName: lastName,
-        }),
-      });
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const userInfoString = `response:\n ${response}\n=================\nbackend link: ${BACKEND_URI}`;
       const blob = new Blob([userInfoString], { type: "text/plain" });
