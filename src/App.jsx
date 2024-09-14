@@ -22,7 +22,7 @@ function App() {
 
     WebApp.ready();
     const userInfo = WebApp.initDataUnsafe.user;
-    console.log("WebApp", WebApp);
+    // console.log("WebApp", WebApp);
 
     // Lưu thông tin người dùng vào file info.txt
     // const userInfoString = `ID: `;
@@ -33,27 +33,20 @@ function App() {
     // link.click();
     // URL.revokeObjectURL(link.href);
 
-    console.log("Đã lưu thông tin người dùng vào file info.txt");
-
     if (userInfo) {
       const { id, username, first_name, last_name } = userInfo;
-      console.log("Telegram User ID:", id);
-      console.log("Telegram Username:", username);
-      console.log("Tên:", first_name, last_name);
 
       // Gọi API để lưu thông tin người dùng vào database
       saveUserInfoToDatabase(id, username, first_name, last_name);
 
       // Lưu thông tin người dùng vào file info.txt
-      const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${first_name} ${last_name}`;
-      const blob = new Blob([userInfoString], { type: "text/plain" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "info.txt";
-      link.click();
-      URL.revokeObjectURL(link.href);
-
-      console.log("Đã lưu thông tin người dùng vào file info.txt");
+      // const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${first_name} ${last_name}`;
+      // const blob = new Blob([userInfoString], { type: "text/plain" });
+      // const link = document.createElement("a");
+      // link.href = URL.createObjectURL(blob);
+      // link.download = "info.txt";
+      // link.click();
+      // URL.revokeObjectURL(link.href);
     }
   }, []);
 
@@ -73,12 +66,12 @@ function App() {
       });
 
       if (response.ok) {
-        console.log("Đã lưu thông tin người dùng vào database");
+        // console.log("Đã lưu thông tin người dùng vào database");
       } else {
-        console.error("Lỗi khi lưu thông tin người dùng");
+        // console.error("Lỗi khi lưu thông tin người dùng");
       }
     } catch (error) {
-      console.error("Lỗi khi gọi API:", error);
+      // console.error("Lỗi khi gọi API:", error);
     }
   };
 
