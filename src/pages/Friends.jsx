@@ -3,7 +3,7 @@ import React from "react";
 function Friends() {
   return (
     <div className="friends-container">
-      <div style={{ maxHeight: "calc(100vh - 120px)", overflowY: "auto" }}>
+      <div>
         <div className="friends-header">
           <span className="friends-emoji" style={{ fontSize: "2.5em" }}>
             👨‍👩‍👧‍👦
@@ -350,7 +350,7 @@ function Friends() {
         className="invite-button"
         style={{
           position: "fixed",
-          bottom: "45px", // Thêm khoảng cách để nút nằm trên thanh điều hướng
+          bottom: "71px", // Thêm khoảng cách để nút nằm trên thanh điều hướng
           left: 0,
           width: "100%",
           padding: "15px",
