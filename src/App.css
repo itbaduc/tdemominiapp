@@ -1,9 +1,9 @@
-html,
-body {
+html {
   max-height: 100%;
   margin: 0;
   padding: 0;
   background-color: #000 !important;
+  overflow: hidden;
 }
 
 #root {
