@@ -91,7 +91,8 @@ function App() {
             style={{ "max-height": "calc(100vh - 80px)", overflowY: "auto" }}
           >
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Navigate to="/home" replace />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/earn" element={<Earn />} />
               <Route path="/friends" element={<Friends />} />
               <Route path="/leaderbroad" element={<Leaderbroad />} />
