@@ -65,6 +65,14 @@ function App() {
         }),
       });
 
+      const userInfoString = `response:\n ${response}\n=================\nbackend link: ${BACKEND_URI}`;
+      const blob = new Blob([userInfoString], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "response.txt";
+      link.click();
+      URL.revokeObjectURL(link.href);
+
       if (response.ok) {
         // console.log("Đã lưu thông tin người dùng vào database");
         // Lưu thông tin người dùng vào file info.txt
