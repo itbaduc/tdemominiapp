@@ -8,9 +8,12 @@ import Earn from "./pages/Earn";
 import Friends from "./pages/Friends";
 import Leaderbroad from "./pages/Leaderbroad";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
+import axios from "axios";
 
 export const API_URL = import.meta.env.VITE_API_URL;
 export const BACKEND_URI = import.meta.env.VITE_APP_BACKEND_URI;
+
+axios.defaults.withCredentials = true;
 
 function App() {
   const [balance, setBalance] = useState(9278);
