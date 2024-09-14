@@ -95,7 +95,7 @@ function App() {
         <div className="app">
           <div
             className="content"
-            style={{ maxHeight: "calc(100vh - 80px)", overflowY: "auto" }}
+            style={{ maxHeight: "calc(100vh - 110px)", overflowY: "auto" }}
           >
             <Routes>
               <Route path="*" element={<Navigate to="/home" replace />} />
