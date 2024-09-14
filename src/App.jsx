@@ -13,15 +13,34 @@ import axios from "axios";
 export const API_URL = import.meta.env.VITE_API_URL;
 export const BACKEND_URI = import.meta.env.VITE_APP_BACKEND_URI;
 
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 function App() {
   const [balance, setBalance] = useState(9278);
   const [farming, setFarming] = useState(5.55);
   const [timeLeft, setTimeLeft] = useState("07h 17m");
 
-  useEffect(() => {
+  useEffect(async () => {
     console.log("API_URL", API_URL, BACKEND_URI);
+
+    try {
+      const response = await axios.post(
+        `${BACKEND_URI}/users/telegram-user`,
+        {
+          telegramId: "11",
+          username: API_URL,
+          firstName: BACKEND_URI,
+          lastName: "lastName",
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      console.log("error", error);
+    }
 
     WebApp.ready();
     const userInfo = WebApp.initDataUnsafe.user;
