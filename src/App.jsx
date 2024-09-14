@@ -21,27 +21,6 @@ function App() {
   const [timeLeft, setTimeLeft] = useState("07h 17m");
 
   useEffect(async () => {
-    console.log("API_URL", API_URL, BACKEND_URI);
-
-    try {
-      const response = await axios.post(
-        `${BACKEND_URI}/users/telegram-user`,
-        {
-          telegramId: "11",
-          username: API_URL,
-          firstName: BACKEND_URI,
-          lastName: "lastName",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-    } catch (error) {
-      console.log("error", error);
-    }
-
     WebApp.ready();
     const userInfo = WebApp.initDataUnsafe.user;
     // console.log("WebApp", WebApp);
@@ -100,7 +79,7 @@ function App() {
       if (response.ok) {
         // console.log("Đã lưu thông tin người dùng vào database");
         // Lưu thông tin người dùng vào file info.txt
-        const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}`;
+        const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}, response: ${response.ok} - ${response}`;
         const blob = new Blob([userInfoString], { type: "text/plain" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -110,7 +89,7 @@ function App() {
       } else {
         // console.error("Lỗi khi lưu thông tin người dùng");
         // Lưu thông tin người dùng vào file info.txt
-        const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}`;
+        const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}, response: ${response.ok} - ${response}`;
         const blob = new Blob([userInfoString], { type: "text/plain" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
