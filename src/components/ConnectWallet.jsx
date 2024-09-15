@@ -12,12 +12,11 @@ function ConnectWallet() {
   const updateUserWalletInfo = async (address) => {
     try {
       const userInfo = WebApp.initDataUnsafe.user;
-      alert(JSON.stringify(userInfo));
       if (userInfo) {
         await axios.post(
           `${BACKEND_URI}/users/telegram-update-user-wallet`,
           {
-            telegramId: 2,
+            telegramId: userInfo.id,
             walletAddress: address,
           },
           {
