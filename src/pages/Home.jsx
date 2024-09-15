@@ -38,6 +38,14 @@ function Home() {
         }
       );
 
+      alert(
+        response.data.message +
+          " " +
+          response.data.checkedin +
+          " " +
+          response.data.points
+      );
+
       if (response.data.success) {
         const newPoints = response.data.points;
         if (newPoints !== balance) {
