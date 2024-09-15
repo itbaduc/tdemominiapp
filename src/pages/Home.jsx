@@ -7,14 +7,15 @@ import { BACKEND_URI } from "../helper/constant";
 
 function Home() {
   const [balance, setBalance] = useState(0);
-  const [farming, setFarming] = useState(0);
-  const [timeLeft, setTimeLeft] = useState("07h 17m");
-  const [isJoined, setIsJoined] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     WebApp.ready();
     const userInfo = WebApp.initDataUnsafe.user;
+    const storedBalance = localStorage.getItem("userBalance");
+    if (storedBalance) {
+      setBalance(parseInt(storedBalance, 10));
+    }
     if (userInfo) {
       checkIn(
         userInfo.id,
@@ -37,19 +38,13 @@ function Home() {
         }
       );
 
-      alert(
-        response.data.message +
-          " " +
-          response.data.checkedin +
-          " " +
-          response.data.points
-      );
-
-      if (response.data.success && !response.data.checkedin) {
+      if (response.data.success) {
         const newPoints = response.data.points;
-        animatePointsIncrease(balance, newPoints);
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 5000);
+        if (newPoints !== balance) {
+          animatePointsIncrease(balance, newPoints);
+          setShowConfetti(true);
+          setTimeout(() => setShowConfetti(false), 5000);
+        }
       }
     } catch (error) {
       console.error("Lỗi khi check-in:", error);
@@ -64,6 +59,7 @@ function Home() {
       if (current >= end) {
         clearInterval(timer);
         setBalance(end);
+        localStorage.setItem("userBalance", end.toString());
       } else {
         setBalance(current);
       }
