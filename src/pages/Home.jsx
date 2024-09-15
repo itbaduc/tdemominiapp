@@ -37,7 +37,13 @@ function Home() {
         }
       );
 
-      alert(response.data.message, response.data.checkedin);
+      alert(
+        response.data.message +
+          " " +
+          response.data.checkedin +
+          " " +
+          response.data.points
+      );
 
       if (response.data.success && !response.data.checkedin) {
         const newPoints = response.data.points;
