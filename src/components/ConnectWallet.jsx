@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useTonConnectUI } from "@tonconnect/ui-react";
+import { useTonConnectUI, useTonAddress } from "@tonconnect/ui-react";
 import axios from "axios";
 import { BACKEND_URI } from "../helper/constant";
 import WebApp from "@twa-dev/sdk";
 
 function ConnectWallet() {
   const [tonConnectUI] = useTonConnectUI();
-  const [walletAddress, setWalletAddress] = useState("");
+  const userFriendlyAddress = useTonAddress();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const updateUserWalletInfo = async (address) => {
@@ -31,25 +31,31 @@ function ConnectWallet() {
     }
   };
 
+  // useEffect(() => {
+  //   const updateWalletAddress = async () => {
+  //     if (tonConnectUI.connected) {
+  //       const walletInfo = await tonConnectUI.wallet;
+  //       // alert(JSON.stringify(walletInfo));
+  //       if (walletInfo) {
+  //         const address = walletInfo.account.address;
+
+  //         setWalletAddress(address);
+  //         updateUserWalletInfo(address.slice(2, address.length));
+  //       }
+  //     } else {
+  //       setWalletAddress("");
+  //     }
+  //   };
+
+  //   updateWalletAddress();
+  //   tonConnectUI.onStatusChange(updateWalletAddress);
+  // }, [tonConnectUI]);
+
   useEffect(() => {
-    const updateWalletAddress = async () => {
-      if (tonConnectUI.connected) {
-        const walletInfo = await tonConnectUI.wallet;
-        // alert(JSON.stringify(walletInfo));
-        if (walletInfo) {
-          const address = walletInfo.account.address;
-
-          setWalletAddress(address);
-          updateUserWalletInfo(address.slice(2, address.length));
-        }
-      } else {
-        setWalletAddress("");
-      }
-    };
-
-    updateWalletAddress();
-    tonConnectUI.onStatusChange(updateWalletAddress);
-  }, [tonConnectUI]);
+    if (userFriendlyAddress) {
+      updateUserWalletInfo(userFriendlyAddress);
+    }
+  }, [userFriendlyAddress]);
 
   const handleConnect = async () => {
     await tonConnectUI.openModal();
@@ -61,7 +67,7 @@ function ConnectWallet() {
 
   return (
     <div className="connect-wallet">
-      {walletAddress ? (
+      {userFriendlyAddress ? (
         <div
           className="dropdown"
           style={{ position: "relative", display: "inline-block" }}
@@ -71,7 +77,9 @@ function ConnectWallet() {
             style={{ padding: "10px", cursor: "pointer" }}
             onClick={toggleDropdown}
           >
-            {`${walletAddress.slice(2, 6)}...${walletAddress.slice(-4)}`}
+            {`${userFriendlyAddress.slice(0, 4)}...${userFriendlyAddress.slice(
+              -4
+            )}`}
           </button>
           {isDropdownOpen && (
             <div
@@ -90,7 +98,10 @@ function ConnectWallet() {
             >
               <p style={{ padding: "12px 16px", margin: 0, color: "white" }}>
                 Add:{" "}
-                {`${walletAddress.slice(2, 6)}...${walletAddress.slice(-4)}`}
+                {`${userFriendlyAddress.slice(
+                  0,
+                  4
+                )}...${userFriendlyAddress.slice(-4)}`}
               </p>
               <button
                 onClick={() => {
