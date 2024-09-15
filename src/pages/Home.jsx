@@ -1,44 +1,66 @@
-import { useState, useEffect } from 'react';
-import WebApp from '@twa-dev/sdk';
-import ConnectWallet from '../components/ConnectWallet';
+import { useState, useEffect } from "react";
+import WebApp from "@twa-dev/sdk";
+import ConnectWallet from "../components/ConnectWallet";
+import axios from "axios";
+import Confetti from "react-confetti";
+import { BACKEND_URI } from "../helper/constant";
 
 function Home() {
-  const [balance, setBalance] = useState(9278);
-  const [farming, setFarming] = useState(5.55);
-  const [timeLeft, setTimeLeft] = useState('07h 17m');
+  const [balance, setBalance] = useState(0);
+  const [farming, setFarming] = useState(0);
+  const [timeLeft, setTimeLeft] = useState("07h 17m");
   const [isJoined, setIsJoined] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     WebApp.ready();
-    // Kiểm tra trạng thái tham gia của người dùng
-    // Ví dụ: setIsJoined(checkUserJoinStatus());
+    const userInfo = WebApp.initDataUnsafe.user;
+    if (userInfo) {
+      checkIn(userInfo.id);
+    }
   }, []);
+
+  const checkIn = async (telegramId) => {
+    try {
+      const response = await axios.post(
+        `${BACKEND_URI}/users/check-in`,
+        { telegramId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.success && !response.data.checkedin) {
+        const newPoints = response.data.points;
+        animatePointsIncrease(balance, newPoints);
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 5000);
+      }
+    } catch (error) {
+      console.error("Lỗi khi check-in:", error);
+    }
+  };
+
+  const animatePointsIncrease = (start, end) => {
+    let current = start;
+    const step = Math.ceil((end - start) / 50);
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= end) {
+        clearInterval(timer);
+        setBalance(end);
+      } else {
+        setBalance(current);
+      }
+    }, 20);
+  };
 
   return (
     <>
       <ConnectWallet />
-      {/* <div style={{marginTop: '20px'}}>
-      {isJoined ? (
-        <div className="community-card">
-          <img src="/icon.jpg" alt="CatRun icon" className="community-icon" />
-          <div style={{ textAlign: 'left', margin: 0 }}>
-            <h3 style={{ margin: 0 }}>DOGS Community</h3>
-            <p style={{ fontSize: '0.9em', margin: 0 }}>20,754,859,791 BP</p>
-          </div>
-          <button className="open-button">Open</button>
-        </div>
-      ) : (
-        <div className="tribes-card">
-          <div className="tribes-icon">⭐</div>
-          <div className="tribes-info">
-            <h3>Tribes</h3>
-            <p>Compete for rewards</p>
-          </div>
-          <button className="open-button">Open</button>
-        </div>
-      )}
-      </div> */}
-
+      {showConfetti && <Confetti />}
       <div className="profile">
         <div className="avatar">D</div>
         <h2>DakotaLynn</h2>
@@ -52,12 +74,6 @@ function Home() {
         </div>
         <button className="play-button">Play Game</button>
       </div>
-
-      {/* <div className="farming-info">
-        <span className="farming-icon">⚡</span>
-        <span>Farming ₿ {farming}</span>
-        <span className="time-left">{timeLeft}</span>
-      </div> */}
     </>
   );
 }

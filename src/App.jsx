@@ -14,93 +14,16 @@ import Earn from "./pages/Earn";
 import Friends from "./pages/Friends";
 import Leaderbroad from "./pages/Leaderbroad";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
-import axios from "axios";
-
-export const API_URL = import.meta.env.VITE_API_URL;
-export const BACKEND_URI = import.meta.env.VITE_APP_BACKEND_URI;
-
-// axios.defaults.withCredentials = true;
+import { API_URL } from "./helper/constant";
 
 function AppContent() {
-  const [balance, setBalance] = useState(9278);
-  const [farming, setFarming] = useState(5.55);
-  const [timeLeft, setTimeLeft] = useState("07h 17m");
   const [currentPage, setCurrentPage] = useState("home");
   const location = useLocation();
-
-  useEffect(() => {
-    WebApp.ready();
-    const userInfo = WebApp.initDataUnsafe.user;
-
-    if (userInfo) {
-      const { id, username, first_name, last_name } = userInfo;
-
-      // Gọi API để lưu thông tin người dùng vào database
-      saveUserInfoToDatabase(id, username, first_name, last_name);
-    }
-  }, []);
 
   useEffect(() => {
     const path = location.pathname.slice(1) || "home";
     setCurrentPage(path);
   }, [location]);
-
-  const saveUserInfoToDatabase = async (id, username, firstName, lastName) => {
-    try {
-      const response = await axios.post(
-        `${BACKEND_URI}/users/telegram-user`,
-        {
-          telegramId: id,
-          username: username,
-          firstName: firstName,
-          lastName: lastName,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (
-        response.status == 200 ||
-        response.status == 201 ||
-        response.status == 204
-      ) {
-        // console.log("Đã lưu thông tin người dùng vào database");
-        // Lưu thông tin người dùng vào file info.txt
-        // Lấy địa chỉ URL hiện tại
-        // const currentURL = window.location.href;
-        // const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\currentURL link: ${currentURL}\nresponse: ${
-        //   response.status
-        // } - ${JSON.stringify(response)}`;
-        // const blob = new Blob([userInfoString], { type: "text/plain" });
-        // const link = document.createElement("a");
-        // link.href = URL.createObjectURL(blob);
-        // link.download = "ok.txt";
-        // link.click();
-        // URL.revokeObjectURL(link.href);
-      } else {
-        // console.error("Lỗi khi lưu thông tin người dùng");
-        // Lưu thông tin người dùng vào file info.txt
-        // const userInfoString = `ID: ${id}\nTên người dùng: ${username}\nTên: ${firstName} ${lastName}\nbackend link: ${BACKEND_URI}\nresponse: ${response.ok} - ${response}`;
-        // const blob = new Blob([userInfoString], { type: "text/plain" });
-        // const link = document.createElement("a");
-        // link.href = URL.createObjectURL(blob);
-        // link.download = "error.txt";
-        // link.click();
-        // URL.revokeObjectURL(link.href);
-      }
-    } catch (error) {
-      // const userInfoString = `tryerror:\n ${error}\n=================\nbackend link: ${BACKEND_URI}`;
-      // const blob = new Blob([userInfoString], { type: "text/plain" });
-      // const link = document.createElement("a");
-      // link.href = URL.createObjectURL(blob);
-      // link.download = "tryerror.txt";
-      // link.click();
-      // URL.revokeObjectURL(link.href);
-    }
-  };
 
   return (
     <div className="app">
