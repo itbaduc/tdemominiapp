@@ -48,8 +48,9 @@ function Home() {
 
       if (response.data.success) {
         const newPoints = parseFloat(response.data.points);
-        if (newPoints !== parseFloat(balance)) {
-          animatePointsIncrease(balance, newPoints);
+        const currentBalance = parseFloat(balance);
+        if (newPoints !== currentBalance) {
+          animatePointsIncrease(currentBalance, newPoints);
           setShowConfetti(true);
           setTimeout(() => setShowConfetti(false), 3000);
         }
