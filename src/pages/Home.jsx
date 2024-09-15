@@ -37,6 +37,8 @@ function Home() {
         }
       );
 
+      alert(response.data.message, response.data.checkedin);
+
       if (response.data.success && !response.data.checkedin) {
         const newPoints = response.data.points;
         animatePointsIncrease(balance, newPoints);
