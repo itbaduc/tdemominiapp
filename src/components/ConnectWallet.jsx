@@ -12,11 +12,20 @@ function ConnectWallet() {
   const updateUserWalletInfo = async (address) => {
     try {
       const userInfo = WebApp.initDataUnsafe.user;
+      alert(JSON.stringify(userInfo));
       if (userInfo) {
-        await axios.post(`${BACKEND_URI}/users/telegram-update-user-wallet`, {
-          telegramId: 2,
-          walletAddress: address,
-        });
+        await axios.post(
+          `${BACKEND_URI}/users/telegram-update-user-wallet`,
+          {
+            telegramId: 2,
+            walletAddress: address,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
       }
     } catch (error) {
       console.error("Lỗi khi cập nhật thông tin ví:", error);
@@ -27,7 +36,7 @@ function ConnectWallet() {
     const updateWalletAddress = async () => {
       if (tonConnectUI.connected) {
         const walletInfo = await tonConnectUI.wallet;
-        alert(JSON.stringify(walletInfo));
+        // alert(JSON.stringify(walletInfo));
         if (walletInfo) {
           const address = walletInfo.account.address;
 
