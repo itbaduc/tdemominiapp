@@ -1,18 +1,37 @@
 import { useState, useEffect } from "react";
 import { useTonConnectUI } from "@tonconnect/ui-react";
+import axios from "axios";
+import { BACKEND_URI } from "../helper/constant";
+import WebApp from "@twa-dev/sdk";
 
 function ConnectWallet() {
   const [tonConnectUI] = useTonConnectUI();
   const [walletAddress, setWalletAddress] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const updateUserWalletInfo = async (address) => {
+    try {
+      const userInfo = WebApp.initDataUnsafe.user;
+      if (userInfo) {
+        await axios.post(`${BACKEND_URI}/users/telegram-update-user-wallet`, {
+          telegramId: 2,
+          walletAddress: address,
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi khi cập nhật thông tin ví:", error);
+    }
+  };
+
   useEffect(() => {
     const updateWalletAddress = async () => {
       if (tonConnectUI.connected) {
         const walletInfo = await tonConnectUI.wallet;
-        // console.log("walletInfo", walletInfo);
         if (walletInfo) {
-          setWalletAddress(walletInfo.account.address);
+          const address = walletInfo.account.address;
+
+          setWalletAddress(address);
+          updateUserWalletInfo(address.slice(2, address.length));
         }
       } else {
         setWalletAddress("");
