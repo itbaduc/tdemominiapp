@@ -1,12 +1,20 @@
 import { useState, useEffect } from "react";
-import { useTonConnectUI, useTonAddress } from "@tonconnect/ui-react";
+import {
+  useTonConnectUI,
+  useTonAddress,
+  useTonWallet,
+} from "@tonconnect/ui-react";
 import axios from "axios";
-import { BACKEND_URI } from "../helper/constant";
+import { BACKEND_URI, TON_CHAIN } from "../helper/constant";
 import WebApp from "@twa-dev/sdk";
+import { CHAIN } from "@tonconnect/ui";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ConnectWallet() {
   const [tonConnectUI] = useTonConnectUI();
   const userFriendlyAddress = useTonAddress();
+  const wallet = useTonWallet();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const updateUserWalletInfo = async (address) => {
@@ -31,34 +39,33 @@ function ConnectWallet() {
     }
   };
 
-  // useEffect(() => {
-  //   const updateWalletAddress = async () => {
-  //     if (tonConnectUI.connected) {
-  //       const walletInfo = await tonConnectUI.wallet;
-  //       // alert(JSON.stringify(walletInfo));
-  //       if (walletInfo) {
-  //         const address = walletInfo.account.address;
-
-  //         setWalletAddress(address);
-  //         updateUserWalletInfo(address.slice(2, address.length));
-  //       }
-  //     } else {
-  //       setWalletAddress("");
-  //     }
-  //   };
-
-  //   updateWalletAddress();
-  //   tonConnectUI.onStatusChange(updateWalletAddress);
-  // }, [tonConnectUI]);
+  const checkNetwork = () => {
+    if (wallet && wallet.account.chain !== TON_CHAIN) {
+      toast.error("Vui lòng kết nối với mạng Testnet", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      tonConnectUI.disconnect();
+      return false;
+    }
+    return true;
+  };
 
   useEffect(() => {
-    if (userFriendlyAddress) {
+    if (userFriendlyAddress && checkNetwork()) {
       updateUserWalletInfo(userFriendlyAddress);
     }
-  }, [userFriendlyAddress]);
+  }, [userFriendlyAddress, wallet]);
 
   const handleConnect = async () => {
     await tonConnectUI.openModal();
+    if (wallet && !checkNetwork()) {
+      tonConnectUI.disconnect();
+    }
   };
 
   const toggleDropdown = () => {
@@ -67,36 +74,17 @@ function ConnectWallet() {
 
   return (
     <div className="connect-wallet">
+      <ToastContainer />
       {userFriendlyAddress ? (
-        <div
-          className="dropdown"
-          style={{ position: "relative", display: "inline-block" }}
-        >
-          <button
-            className="dropdown-toggle"
-            style={{ padding: "10px", cursor: "pointer" }}
-            onClick={toggleDropdown}
-          >
+        <div className="dropdown">
+          <button className="dropdown-toggle" onClick={toggleDropdown}>
             {`${userFriendlyAddress.slice(0, 4)}...${userFriendlyAddress.slice(
               -4
             )}`}
           </button>
           {isDropdownOpen && (
-            <div
-              className="dropdown-menu"
-              style={{
-                position: "absolute",
-                backgroundColor: "#1b1b1b", // Nền sáng hơn
-                minWidth: "160px",
-                boxShadow: "0px 8px 16px 0px rgba(0,0,0,0.2)",
-                zIndex: 1,
-                border: "none", // Loại bỏ viền
-                color: "white", // Chữ màu trắng
-                borderRadius: "10px",
-                textAlign: "left",
-              }}
-            >
-              <p style={{ padding: "12px 16px", margin: 0, color: "white" }}>
+            <div className="dropdown-menu">
+              <p className="wallet-address">
                 Add:{" "}
                 {`${userFriendlyAddress.slice(
                   0,
@@ -104,18 +92,10 @@ function ConnectWallet() {
                 )}...${userFriendlyAddress.slice(-4)}`}
               </p>
               <button
+                className="disconnect-button"
                 onClick={() => {
                   tonConnectUI.disconnect();
                   setIsDropdownOpen(false);
-                }}
-                style={{
-                  width: "100%",
-                  padding: "12px 16px",
-                  textAlign: "left",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "#ff2c2c", // Chữ màu trắng
-                  fontWeight: "bold",
                 }}
               >
                 Disconnect
@@ -124,7 +104,9 @@ function ConnectWallet() {
           )}
         </div>
       ) : (
-        <button onClick={handleConnect}>Connect Wallet</button>
+        <button className="connect-button" onClick={handleConnect}>
+          Connect Wallet
+        </button>
       )}
     </div>
   );

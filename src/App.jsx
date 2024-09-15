@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 import WebApp from "@twa-dev/sdk";
 import {
   HashRouter,
