@@ -14,7 +14,7 @@ function Home() {
     const userInfo = WebApp.initDataUnsafe.user;
     const storedBalance = localStorage.getItem("userBalance");
     if (storedBalance) {
-      setBalance(parseInt(storedBalance, 10));
+      setBalance(parseFloat(storedBalance));
     }
     if (userInfo) {
       checkIn(
@@ -38,20 +38,20 @@ function Home() {
         }
       );
 
-      alert(
-        response.data.message +
-          " " +
-          response.data.checkedin +
-          " " +
-          response.data.points
-      );
+      // alert(
+      //   response.data.message +
+      //     " " +
+      //     response.data.checkedin +
+      //     " " +
+      //     response.data.points
+      // );
 
       if (response.data.success) {
-        const newPoints = response.data.points;
-        if (newPoints !== balance) {
+        const newPoints = parseFloat(response.data.points);
+        if (newPoints !== parseFloat(balance)) {
           animatePointsIncrease(balance, newPoints);
           setShowConfetti(true);
-          setTimeout(() => setShowConfetti(false), 5000);
+          setTimeout(() => setShowConfetti(false), 3000);
         }
       }
     } catch (error) {
@@ -60,6 +60,7 @@ function Home() {
   };
 
   const animatePointsIncrease = (start, end) => {
+    alert(start + " " + end);
     let current = start;
     const step = Math.ceil((end - start) / 50);
     const timer = setInterval(() => {
