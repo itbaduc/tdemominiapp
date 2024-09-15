@@ -16,15 +16,20 @@ function Home() {
     WebApp.ready();
     const userInfo = WebApp.initDataUnsafe.user;
     if (userInfo) {
-      checkIn(userInfo.id);
+      checkIn(
+        userInfo.id,
+        userInfo.username,
+        userInfo.first_name,
+        userInfo.last_name
+      );
     }
   }, []);
 
-  const checkIn = async (telegramId) => {
+  const checkIn = async (telegramId, username, firstName, lastName) => {
     try {
       const response = await axios.post(
         `${BACKEND_URI}/users/check-in`,
-        { telegramId },
+        { telegramId, username, firstName, lastName },
         {
           headers: {
             "Content-Type": "application/json",
