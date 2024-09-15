@@ -41,13 +41,19 @@ function ConnectWallet() {
 
   const checkNetwork = () => {
     if (wallet && wallet.account.chain !== TON_CHAIN) {
-      toast.error("Vui lòng kết nối với mạng Testnet", {
+      let ton_network_msg = "Please connect to Testnet";
+      if (TON_CHAIN === "-239") {
+        ton_network_msg = "Please connect to Mainnet";
+      }
+      toast.error(ton_network_msg, {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
+        width: "80%",
+        theme: "dark",
       });
       tonConnectUI.disconnect();
       return false;
