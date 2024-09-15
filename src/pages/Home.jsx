@@ -38,18 +38,19 @@ function Home() {
         }
       );
 
-      // alert(
-      //   response.data.message +
-      //     " " +
-      //     response.data.checkedin +
-      //     " " +
-      //     response.data.points
-      // );
-
-      if (response.data.success) {
+      if (response.data.success && !response.data.checkedin) {
         const newPoints = parseFloat(response.data.points);
         const currentBalance = parseFloat(balance);
         if (newPoints !== currentBalance) {
+          alert(
+            currentBalance +
+              " " +
+              newPoints +
+              " " +
+              typeof newPoints +
+              " " +
+              typeof currentBalance
+          );
           animatePointsIncrease(currentBalance, newPoints);
           setShowConfetti(true);
           setTimeout(() => setShowConfetti(false), 3000);
@@ -61,7 +62,6 @@ function Home() {
   };
 
   const animatePointsIncrease = (start, end) => {
-    alert(start + " " + end);
     let current = start;
     const step = Math.ceil((end - start) / 50);
     const timer = setInterval(() => {
